@@ -1,0 +1,3 @@
+{
+    "connectionString" : "mongodb+srv://testuser:testuser1234@notesapp.vfzix.mongodb.net/?retryWrites=true&w=majority&appName=notesapp"
+}
