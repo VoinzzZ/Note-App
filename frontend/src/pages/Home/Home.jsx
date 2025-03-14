@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import NoteCard from '../../components/Cards/NoteCard'
-import { MdAdd, MdEdit } from 'react-icons/md'
+import { MdAdd } from 'react-icons/md'
 import AddEditNotes from './AddEditNotes'
 import Modal from 'react-modal'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +9,10 @@ import axioInstance from '../../../utils/axiosIntance'
 import Toast from '../../components/ToastMessage/Toast'
 
 const Home = () => {
+
+  const [allNotes, setAllNotes] = useState([]);
+  const [userInfo, setUserInfo] = useState(null);
+  const navigate = useNavigate()
 
   const [openAddEditModal, setOpenEditModal] = useState({
     isShown: false,
@@ -36,10 +40,6 @@ const Home = () => {
       message: "",
     });
   };
-
-  const [allNotes, setAllNotes] = useState([]);
-  const [userInfo, setUserInfo] = useState(null);
-  const navigate = useNavigate()
 
   const handleEdit = (noteDetails) => {
     setOpenEditModal({ isShown: true, data: noteDetails, type: "edit" });
@@ -73,6 +73,29 @@ const Home = () => {
     }
   }
 
+  //Delted Note
+  const DeleteNote = async (data) => {
+    try {
+      const noteId = data._id;
+
+      const response = await axioInstance.delete("/delete-note/" + noteId);
+
+      if(response.data && !response.data.error) {
+              showToastMessage("delete", "Note Deleted Successfully",);
+              getAllNotes();
+              onClose();
+      }
+} catch (error) {
+      if(
+        error.response &&
+         error.response.data &&
+          error.response.data.message
+        ) {
+        console.log("An unexpected error ocurred. Please try again");
+      }
+}
+  }
+
   useEffect(() => {
     getAllNotes();
     getUserInfo();
@@ -83,7 +106,7 @@ const Home = () => {
     <>
       <Navbar userInfo={userInfo} />
       <div className='container mx-auto px-6'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
+       {allNotes.length> 0 ?<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
           {allNotes.map((item, index) => ( 
             <NoteCard
             key={item._id}
@@ -92,12 +115,11 @@ const Home = () => {
             tags={item.tags}
             isPinned={item.isPinned}
             onEdit={() => handleEdit(item)}
-            onDelete={() => {}}
+            onDelete={() => DeleteNote(item)}
             onPinNote={() => {}}
           />
           ))}
-          
-      </div>
+      </div> : <EmptyCard />}
     </div>
 
     <button className='fixed w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 right-10 bottom-10' 
@@ -125,6 +147,7 @@ const Home = () => {
         setOpenEditModal({isShown: false, type: "add", data: null});
       }}
       getAllNotes={getAllNotes}
+      showToastMessage={showToastMessage}
       />
     </Modal>
 
