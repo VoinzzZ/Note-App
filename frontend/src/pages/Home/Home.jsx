@@ -7,6 +7,7 @@ import Modal from 'react-modal'
 import { useNavigate } from 'react-router-dom'
 import axioInstance from '../../../utils/axiosIntance'
 import Toast from '../../components/ToastMessage/Toast'
+import EmptyCard from '../../components/EmptyCarf/EmptyCard'
 
 const Home = () => {
 
