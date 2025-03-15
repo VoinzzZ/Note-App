@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import axioInstance from '../../../utils/axiosIntance'
 import Toast from '../../components/ToastMessage/Toast'
 import EmptyCard from '../../components/EmptyCarf/EmptyCard'
+import addNotesImg from '../../assets/images/add-notes.svg';
 
 const Home = () => {
 
@@ -120,7 +121,8 @@ const Home = () => {
             onPinNote={() => {}}
           />
           ))}
-      </div> : <EmptyCard />}
+      </div> : <EmptyCard imgSrc={addNotesImg} message={`Start creating your first note! Click the 'Add' button to
+         jot down your thoughts, ideas, and reminders. Let's get started!`}/>}
     </div>
 
     <button className='fixed w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 right-10 bottom-10' 
