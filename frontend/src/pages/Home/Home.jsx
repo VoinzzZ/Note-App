@@ -7,13 +7,15 @@ import Modal from 'react-modal'
 import { useNavigate } from 'react-router-dom'
 import axioInstance from '../../../utils/axiosIntance'
 import Toast from '../../components/ToastMessage/Toast'
-import EmptyCard from '../../components/EmptyCarf/EmptyCard'
+import EmptyCard from '../../components/EmptyCard/EmptyCard'
 import addNotesImg from '../../assets/images/add-notes.svg';
+import noDataImg from '../../assets/images/no-data.svg';
 
 const Home = () => {
 
   const [allNotes, setAllNotes] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate()
 
   const [openAddEditModal, setOpenEditModal] = useState({
@@ -98,6 +100,73 @@ const Home = () => {
 }
   }
 
+  //Search for a notes
+  const onSearchNote = async (query) => {
+    try {
+      const response = await axioInstance.get("/search-notes", {
+         params: { query },
+      });
+
+      if(response.data && response.data.notes) {
+        setIsSearch(true);
+        setAllNotes(response.data.notes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Update isPinned notes
+  const updateIsPinned = async (noteData) => {
+    const noteId = noteData._id;
+    const currentPinStatus = noteData.isPinned;
+    const newPinStatus = !currentPinStatus;
+
+    console.log('Before update:', {
+      noteId,
+      currentPinStatus,
+      newPinStatus
+    });
+
+    try {
+      const response = await axioInstance.put(
+        "/update-note-pinned/" + noteId,
+        {
+          isPinned: newPinStatus
+        }
+      );
+  
+      if(response.data && response.data.note) {
+        console.log('After update:', {
+          updatedNote: response.data.note,
+          newPinStatus: response.data.note.isPinned
+        });
+        
+        if(response.data.note.isPinned === newPinStatus) {
+          showToastMessage("update", "Note Pin Status Updated");
+          getAllNotes();
+        } else {
+          showToastMessage("error", "Pin status not updated correctly");
+          console.error("Pin status mismatch:", {
+            expected: newPinStatus,
+            received: response.data.note.isPinned
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error updating pin status:", {
+        error: error.message,
+        response: error.response?.data
+      });
+      showToastMessage("error", "Failed to update note pin status");
+    }
+  }
+
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllNotes();
+  };
+
   useEffect(() => {
     getAllNotes();
     getUserInfo();
@@ -106,9 +175,15 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar 
+      userInfo={userInfo}
+      onSearchNote={onSearchNote} 
+      handleClearSearch={handleClearSearch}
+      />
+
       <div className='container mx-auto px-6'>
-       {allNotes.length> 0 ?<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
+       {allNotes.length> 0 ? (
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
           {allNotes.map((item, index) => ( 
             <NoteCard
             key={item._id}
@@ -118,11 +193,17 @@ const Home = () => {
             isPinned={item.isPinned}
             onEdit={() => handleEdit(item)}
             onDelete={() => DeleteNote(item)}
-            onPinNote={() => {}}
+            onPinNote={() => updateIsPinned(item)}
           />
           ))}
-      </div> : <EmptyCard imgSrc={addNotesImg} message={`Start creating your first note! Click the 'Add' button to
-         jot down your thoughts, ideas, and reminders. Let's get started!`}/>}
+      </div>
+      ) : (
+        <EmptyCard
+          imgSrc={isSearch ? noDataImg : addNotesImg} 
+          message={isSearch ? `Opps! No notes found matching your search.` : `Start creating your first note! Click the 'Add' button to
+          jot down your thoughts, ideas, and reminders. Let's get started!`}
+        />
+      )}
     </div>
 
     <button className='fixed w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 right-10 bottom-10' 

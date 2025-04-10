@@ -53,7 +53,7 @@ const AddEditNotes = ({ type, onClose, getAllNotes, noteData, showToastMessage  
                         }
                 }
         };
-        
+              
         
         const handleAddNote = () => {
                 if(!title) {

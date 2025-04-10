@@ -1,9 +1,14 @@
 require("dotenv").config();
-
-const config = require("./config.json");
 const mongoose = require("mongoose");
 
-mongoose.connect(config.connectionString);
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 const User = require("./models/user.model");
 const Note = require("./models/note.model");
@@ -68,12 +73,12 @@ app.post("/create-account", async (req, res) => {
     const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "36000m",
     });
-
+    
     return res.json({
         error: false, 
         user,
         accessToken,
-        masage: "Account created successfully",
+        message: "Account created successfully",
     });
 });
 
@@ -263,40 +268,30 @@ app.delete("/delete-note/:noteId", authenticateToken, async (req, res) => {
 });
 
 // Update isPinned Value
-app.put("/update-note-pinned/:noteId", authenticateToken, async (req, res) => {
-    const noteId = req.params.noteId;
+app.put('/update-note-pinned/:id', async (req, res) => {
+  try {
+    const noteId = req.params.id;
     const { isPinned } = req.body;
-    const { user } = req.user;
+    
+    console.log('Updating note:', { noteId, newPinStatus: isPinned });
 
-    if(!isPinned) {
-        return res
-         .status(400)
-         .json({ error: true, message: "No changes provided"})
+    const updatedNote = await Note.findByIdAndUpdate(
+      noteId,
+      { isPinned },
+      { new: true } // This ensures you get the updated document back
+    );
+
+    console.log('Note after update:', updatedNote);
+
+    if (!updatedNote) {
+      return res.status(404).json({ error: 'Note not found' });
     }
 
-    try {
-        const note = await Note.findOne({ _id: noteId, userId: user._id });
-
-        if(!note) {
-            return res
-             .status(400)
-             .json({ error: true, message: "Note not found" });
-        }
-
-        note.isPinned = isPinned;
-
-        await note.save();
-
-        return res.json({
-            error: false,
-            note,
-            message: "Note updated succesfully",
-        });
-    } catch(error) {
-        return res
-         .status(500)
-         .json({ error: true, message: "Internal Server Error" });
-    }
+    return res.json({ note: updatedNote });
+  } catch (error) {
+    console.error('Error in update-note-pinned:', error);
+    return res.status(500).json({ error: error.message });
+  }
 });
 
 // Serch Notes
@@ -314,8 +309,8 @@ app.get("/search-notes/", authenticateToken, async (req,res) => {
         const matchingNotes = await Note.find({
             userId: user._id,
             $or: [
-                { title: { $regex: new ReqExp(query, "i") } },
-                { content: { $regex: new ReqExp(query, "i") } }, 
+                { title: { $regex: new RegExp(query, "i") } },
+                { content: { $regex: new RegExp(query, "i") } }, 
             ],
         });
 
@@ -333,9 +328,9 @@ app.get("/search-notes/", authenticateToken, async (req,res) => {
     }
  })  
 
-
-
-
-app.listen(8000);
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;

@@ -10,6 +10,6 @@ const EmptyCard = ({ imgSrc, message}) => {
       </p>
     </div>
   )
-}
+} 
 
 export default EmptyCard
