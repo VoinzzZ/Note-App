@@ -1,6 +1,6 @@
 # 📝 Note App
 
-A full-stack note-taking application built with **React.js** frontend and **Node.js/Express** backend, using **MongoDB** as the database.
+A Simple full-stack note-taking application built with **React.js** frontend and **Node.js/Express** backend, using **MongoDB** as the database.
 
 ## ✨ Features
 
