@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./app/config/db.mongo");
+const connectDB = require("./config/db.mongo");
 
-const authRoutes = require("./app/routes/auth.routes");
-const noteRoutes = require("./app/routes/note.route");
+const authRoutes = require("./routes/auth.routes");
+const noteRoutes = require("./routes/note.route");
 
 const app = express();
 
