@@ -13,7 +13,7 @@ const AddEditNotes = ({ type, onClose, getAllNotes, noteData, showToastMessage  
         // Add Note
         const addnewNote = async () => {
                 try {
-                        const response = await axioInstance.post("/add-note", {
+                        const response = await axioInstance.post("/api/notes/add-note", {
                                 title,
                                 content,
                                 tags,
@@ -36,7 +36,7 @@ const AddEditNotes = ({ type, onClose, getAllNotes, noteData, showToastMessage  
                 const noteId = noteData._id;
 
                 try {
-                        const response = await axioInstance.put("/edit-note/" + noteId, {
+                        const response = await axioInstance.put("api/notes/edit-note/" + noteId, {
                                 title,
                                 content,
                                 tags,

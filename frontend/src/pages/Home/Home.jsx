@@ -52,7 +52,7 @@ const Home = () => {
   //Get User Info
   const getUserInfo = async () => {
     try {
-      const response = await axioInstance.get("/get-user");
+      const response = await axioInstance.get("/api/auth/get-user");
       if(response.data && response.data.user) {
         setUserInfo(response.data.user);
       }
@@ -67,12 +67,12 @@ const Home = () => {
   //Get All Notes
   const getAllNotes = async () => {
     try {
-      const response = await axioInstance.get("/get-all-notes");
+      const response = await axioInstance.get("/api/notes/get-all-notes");
 
       if(response.data && response.data.notes) {
         setAllNotes(response.data.notes);
       }
-    } catch (error) {
+    } catch(error) {
       console.log("An unexpected error ocurred. Please try again");
     }
   }
@@ -81,29 +81,28 @@ const Home = () => {
   const DeleteNote = async (data) => {
     try {
       const noteId = data._id;
-
-      const response = await axioInstance.delete("/delete-note/" + noteId);
+      const response = await axioInstance.delete("api/notes/delete-note/" + noteId);
 
       if(response.data && !response.data.error) {
               showToastMessage("delete", "Note Deleted Successfully",);
               getAllNotes();
-              onClose();
+              setOpenEditModal({ isShown: false, type: "add", data: null });
       }
-} catch (error) {
-      if(
-        error.response &&
-         error.response.data &&
-          error.response.data.message
-        ) {
-        console.log("An unexpected error ocurred. Please try again");
-      }
-}
+    } catch (error) {
+          if(
+            error.response &&
+            error.response.data &&
+              error.response.data.message
+            ) {
+            console.log("An unexpected error ocurred. Please try again");
+          }
+    }
   }
 
   //Search for a notes
   const onSearchNote = async (query) => {
     try {
-      const response = await axioInstance.get("/search-notes", {
+      const response = await axioInstance.get("/api/notes/search-notes", {
          params: { query },
       });
 
@@ -130,7 +129,7 @@ const Home = () => {
 
     try {
       const response = await axioInstance.put(
-        "/update-note-pinned/" + noteId,
+        "/api/notes/update-note-pinned/" + noteId,
         {
           isPinned: newPinStatus
         }
@@ -171,6 +170,7 @@ const Home = () => {
     getAllNotes();
     getUserInfo();
     return () => {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -184,7 +184,7 @@ const Home = () => {
       <div className='container mx-auto px-6'>
        {allNotes.length> 0 ? (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
-          {allNotes.map((item, index) => ( 
+          {allNotes.map((item) => ( 
             <NoteCard
             key={item._id}
             title={item.title} 
