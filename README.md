@@ -9,7 +9,6 @@ A Simple full-stack note-taking application built with **React.js** frontend and
 - 📌 **Pin Notes** - Pin important notes to the top
 - 🔍 **Search Functionality** - Search notes by title or content
 - 🏷️ **Tags Support** - Organize notes with tags
-- 📱 **Responsive Design** - Works on desktop and mobile devices
 - 🔒 **Secure** - User-specific notes with proper authorization
 
 ## 🚀 Tech Stack
