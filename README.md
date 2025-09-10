@@ -18,10 +18,9 @@ A Simple full-stack note-taking application built with **React.js** frontend and
 
 **Backend (.env):**
 ```env
+ACCESS_TOKEN_SECRET=your_secret_here
 PORT=8000
-MONGODB_CONNECTION_STRING=mongodb+srv://username:password@cluster.mongodb.net/notes-app
-ACCESS_TOKEN_SECRET=your-production-jwt-secret
-NODE_ENV=production
+MONGODB_URI=your_mongodb_uri_here
 ```
 
 **Frontend (if needed):**
@@ -69,26 +68,26 @@ npm test         # Run tests (not implemented yet)
 
 ```
 Note-App/
-├── frontend/                 # React frontend
+├── frontend/                     # React frontend
 │   ├── src/
-│   │   ├── components/       # Reusable components
-│   │   ├── pages/           # Page components
-│   │   ├── utils/           # Utility functions
-│   │   └── App.js           # Main app component
+│   │   ├── components/           # Reusable components
+│   │   ├── pages/                 # Page components
+│   │   ├── utils/                 # Utility functions
+│   │   └── App.js                 # Main app component
 │   ├── public/
 │   └── package.json
 │
-├── backend/                  # Node.js backend
+├── backend/                        # Node.js backend
 │   ├── app/
-│   │   ├── controllers/     # Route controllers
-│   │   ├── middlewares/     # Custom middlewares
-│   │   ├── models/         # Mongoose models
-│   │   ├── routes/         # API routes
-│   │   └── utils/          # Utility functions
-│   ├── config/
-│   │   └── db.mongo.js     # Database configuration
-│   ├── app.js              # Express app setup
-│   ├── index.js            # Server entry point
+│   │   ├── controllers/         # Route controllers
+│   │   ├── middlewares/         # Custom middlewares
+│   │   ├── models/               # Mongoose models
+│   │   ├── routes/               # API routes
+│   │   └── utils/                # Utility functions
+│   |   ├── config/
+│   │         └── db.mongo.js     # Database configuration
+│   ├── app.js                    # Express app setup
+│   ├── index.js                  # Server entry point
 │   └── package.json
 │
 ├── .env                     # Environment variables
@@ -116,9 +115,9 @@ npm install
 
 Create `.env` file in backend root:
 ```env
+ACCESS_TOKEN_SECRET=your_secret_here
 PORT=8000
-MONGODB_CONNECTION_STRING=mongodb://localhost:27017/notes-app
-ACCESS_TOKEN_SECRET=your-super-secret-jwt-key
+MONGODB_URI=your_mongodb_uri_here
 ```
 
 Start backend server:
