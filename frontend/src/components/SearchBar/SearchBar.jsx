@@ -10,11 +10,11 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
     };
 
     return (
-        <div className='w-96 flex items-center px-4 bg-slate-100 rounded-lg'>
+        <div className='w-full md:w-96 flex items-center px-4 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700'>
                 <input
                         type='text'
                         placeholder='Search Notes'
-                        className='w-full text-xs py-[15px] outline-none bg-transparent'
+                        className='w-full text-xs py-[15px] outline-none bg-transparent text-slate-900 dark:text-slate-100'
                         value={value}
                         onChange={onChange}
                         onKeyDown={handleKeyPress}
@@ -28,7 +28,7 @@ const SearchBar = ({ value, onChange, handleSearch, onClearSearch }) => {
                )}
                 
                 <FaMagnifyingGlass 
-                    className='text-slate-400 cursor-pointer hover:text-black' 
+                    className='text-slate-400 dark:text-slate-200 cursor-pointer hover:text-black dark:hover:text-white' 
                     onClick={handleSearch}
                 />
         </div>

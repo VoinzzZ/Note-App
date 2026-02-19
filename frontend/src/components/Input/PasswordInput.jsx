@@ -9,13 +9,13 @@ const PasswordInput = ({ value, onChange, placeholder}) => {
     };
 
   return (
-    <div className='flex items-center bg-transparent border rounded-lg px-5 focus-within:ring-2 focus-within:ring-primary'>
+    <div className='flex items-center bg-transparent border rounded-lg px-5 focus-within:ring-2 focus-within:ring-primary dark:border-slate-700'>
         <input 
         value={value}
         onChange={onChange}
         type={isShowPassword ? "text" : "password"}
         placeholder={placeholder || "Password"}
-        className='w-full text-sm text-gray-800 bg-transparent py-3 mr-3 outline-none'
+        className='w-full text-sm text-gray-800 dark:text-slate-100 bg-transparent py-3 mr-3 outline-none'
         />
 
         {isShowPassword ? (<FaRegEye

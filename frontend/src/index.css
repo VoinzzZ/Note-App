@@ -11,7 +11,13 @@
 
    body {
     background-color: #ffffff;
-    overflow: hidden;
+    color: #0f172a;
+    overflow-x: hidden;
+   }
+
+   body.dark, html.dark body {
+    background-color: #0b1220;
+    color: #e2e8f0;
    }
 }
 

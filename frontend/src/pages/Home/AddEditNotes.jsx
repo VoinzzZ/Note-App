@@ -78,7 +78,7 @@ const AddEditNotes = ({ type, onClose, getAllNotes, noteData, showToastMessage  
         }
         
 return (
-    <div className='relative'>
+    <div className='relative text-slate-900 dark:text-slate-100'>
         <button 
         className='w-10 h-10 rounded-full flex items-center justify-center absolute -top-3 -right-3 hover:bg-slate-50'
         onClick={onClose}
@@ -89,7 +89,7 @@ return (
                 <label className='input-label'>TITLE</label>
                 <input
                 type='text'
-                className='text-2xl text-slate-950 outline-none mb-2'
+                className='text-2xl text-slate-950 dark:text-slate-100 bg-transparent outline-none mb-2'
                 placeholder='Go to GYM At 5'  
                 value={title}
                 onChange={({ target }) => setTitle(target.value)}                                             
@@ -100,7 +100,7 @@ return (
                 <label className='input-label mb-2'>CONTENT</label>
                 <textarea 
                 type='text'
-                className='text-sm text-slate-950 outline-none bg-slate-50 p-2 rounded'
+                className='text-sm text-slate-950 dark:text-slate-100 outline-none bg-slate-50 dark:bg-slate-800 p-2 rounded'
                 placeholder='Content'
                 rows={10}
                 value={content}
