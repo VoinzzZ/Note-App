@@ -1,210 +1,127 @@
-# 📝 Note App
+# Note App
 
-A Simple full-stack note-taking application built with **React.js** frontend and **Node.js/Express** backend, using **MongoDB** as the database.
+Full‑stack note‑taking application built with React (frontend) and Node/Express + MongoDB (backend). Features authentication, CRUD, pinning, tags, search, and dark/light theme.
 
-## ✨ Features
+## Demo (Local)
+- Backend: `http://localhost:8000`
+- Frontend: `http://localhost:5173`
 
-- 🔐 **User Authentication** - Register, Login, and JWT-based authentication
-- 📝 **CRUD Operations** - Create, Read, Update, Delete notes
-- 📌 **Pin Notes** - Pin important notes to the top
-- 🔍 **Search Functionality** - Search notes by title or content
-- 🏷️ **Tags Support** - Organize notes with tags
-- 🔒 **Secure** - User-specific notes with proper authorization
+## Features
+- JWT auth: sign up, login, persistent sessions.
+- CRUD notes with rich text fields, tags, and pin/unpin.
+- Search by title/content.
+- Responsive UI with dark/light theme toggle.
+- Toast notifications and modal-based editor.
 
-## 🚀 Tech Stack
+## Tech Stack
+- **Frontend:** React 19, Vite, Tailwind CSS, React Router, Axios, React Modal, React Icons.
+- **Backend:** Node.js, Express.js, MongoDB via Mongoose, JWT, dotenv, cors, nodemon.
 
-### Environment Variables for Production
-
-**Backend (.env):**
-```env
-ACCESS_TOKEN_SECRET=your_secret_here
-PORT=8000
-MONGODB_URI=your_mongodb_uri_here
-```
-
-**Frontend (if needed):**
-```env
-VITE_API_BASE_URL=https://your-backend-domain.com/api
-```
-
-## 🧪 Available Scripts
-
-### Frontend Scripts
-```bash
-npm run dev      # Start development server (Vite)
-npm run build    # Build for production
-npm run preview  # Preview production build
-npm run lint     # Run ESLint
-```
-
-### Backend Scripts  
-```bash
-npm start        # Start server with nodemon
-npm test         # Run tests (not implemented yet)
-```
-
-## 🙏 Acknowledgments
-
-- React.js team for the amazing framework
-- MongoDB for the flexible database
-- Tailwind CSS for the utility-first styling
-- Vite for the fast build toold
-- **React.js** - UI Framework
-- **Axios** - HTTP Client
-- **React Router** - Routing
-- **Tailwind CSS** - Styling
-- **React Icons** - Icons
-
-### Backend
-- **Node.js** - Runtime Environment
-- **Express.js** - Web Framework
-- **MongoDB** - Database
-- **Mongoose** - ODM for MongoDB
-- **JWT** - Authentication
-- **dotenv** - Environment Variables
-
-## 📁 Project Structure
-
+## Project Structure
 ```
 Note-App/
-├── frontend/                     # React frontend
+├── frontend/                  # Vite + React client
 │   ├── src/
-│   │   ├── components/           # Reusable components
-│   │   ├── pages/                 # Page components
-│   │   ├── utils/                 # Utility functions
-│   │   └── App.js                 # Main app component
-│   ├── public/
+│   │   ├── components/        # Reusable UI pieces
+│   │   ├── pages/             # Views (Home, Login, SignUp)
+│   │   ├── context/           # Theme context
+│   │   ├── assets/            # Images/icons
+│   │   └── utils/             # Axios instance, helpers
 │   └── package.json
 │
-├── backend/                        # Node.js backend
-│   ├── app/
-│   │   ├── controllers/         # Route controllers
-│   │   ├── middlewares/         # Custom middlewares
-│   │   ├── models/               # Mongoose models
-│   │   ├── routes/               # API routes
-│   │   └── utils/                # Utility functions
-│   |   ├── config/
-│   │         └── db.mongo.js     # Database configuration
-│   ├── app.js                    # Express app setup
-│   ├── index.js                  # Server entry point
+├── backend/                   # Express API
+│   ├── app/                   # Controllers, routes, middlewares, models, utils, config
+│   ├── app.js                 # Express setup
+│   ├── index.js               # Server entry
 │   └── package.json
-│
-├── .env                     # Environment variables
-└── README.md               # Project documentation
+└── README.md
 ```
 
-## 🛠️ Installation & Setup
+## Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
+- Node.js 18+ (recommended)
 - MongoDB (local or Atlas)
-- Git
 
-### 1. Clone Repository
+### 1) Clone
 ```bash
-git clone https://github.com/yourusername/Note-App.git
+git clone https://github.com/VoinzzZ/Note-App.git
 cd Note-App
 ```
 
-### 2. Backend Setup
+### 2) Backend setup
 ```bash
 cd backend
 npm install
 ```
-
-Create `.env` file in backend root:
+Create `.env` in `backend/`:
 ```env
 ACCESS_TOKEN_SECRET=your_secret_here
 PORT=8000
 MONGODB_URI=your_mongodb_uri_here
 ```
-
-Start backend server:
+Run API:
 ```bash
-npm run dev
-# or
-npm start
+npm start   # uses nodemon
 ```
-Backend will run on `http://localhost:8000`
 
-### 3. Frontend Setup
+### 3) Frontend setup
 ```bash
-cd frontend
+cd ../frontend
 npm install
-npm start
+npm run dev
 ```
-Frontend will run on `http://localhost:3000`
+Visit `http://localhost:5173`.
 
-## 📚 API Documentation
+### API Overview
+Auth
+- `POST /api/auth/create-account` — register `{ fullName, email, password }`
+- `POST /api/auth/login` — login `{ email, password }`
+- `GET /api/auth/get-user` — current user (Authorization: Bearer token)
 
-### Authentication Endpoints
+Notes
+- `POST /api/notes/add-note` — create `{ title, content, tags }`
+- `GET /api/notes/get-all-notes` — list user notes
+- `PUT /api/notes/edit-note/:noteId` — update `{ title, content, tags, isPinned }`
+- `DELETE /api/notes/delete-note/:noteId` — remove
+- `PUT /api/notes/update-note-pinned/:id` — toggle pin `{ isPinned }`
+- `GET /api/notes/search-notes?query=keyword` — search
 
-| Method | Endpoint | Description | Body |
-|--------|----------|-------------|------|
-| POST | `/api/auth/create-account` | Register new user | `{ fullName, email, password }` |
-| POST | `/api/auth/login` | Login user | `{ email, password }` |
-| GET | `/api/auth/get-user` | Get current user | Headers: `Authorization: Bearer <token>` |
-
-### Notes Endpoints
-
-| Method | Endpoint | Description | Body | Auth Required |
-|--------|----------|-------------|------|---------------|
-| POST | `/api/notes/add-note` | Create new note | `{ title, content, tags }` | ✅ |
-| GET | `/api/notes/get-all-notes` | Get all user notes | - | ✅ |
-| PUT | `/api/notes/edit-note/:noteId` | Update note | `{ title, content, tags, isPinned }` | ✅ |
-| DELETE | `/api/notes/delete-note/:noteId` | Delete note | - | ✅ |
-| PUT | `/api/notes/update-note-pinned/:id` | Toggle pin status | `{ isPinned }` | ✅ |
-| GET | `/api/notes/search-notes?query=keyword` | Search notes | Query params | ✅ |
-
-### Response Format
-
-**Success Response:**
-```json
-{
-  "error": false,
-  "message": "Success message",
-  "data": { ... }
-}
+### Environment Variables
+Backend `.env` (required)
+```env
+ACCESS_TOKEN_SECRET=your_secret_here
+PORT=8000
+MONGODB_URI=your_mongodb_uri_here
+```
+Frontend `.env` (optional if proxying)
+```env
+VITE_API_BASE_URL=http://localhost:8000/api
 ```
 
-**Error Response:**
-```json
-{
-  "error": true,
-  "message": "Error message"
-}
+### Scripts
+Frontend
+```bash
+npm run dev       # dev server
+npm run build     # production build
+npm run preview   # preview built app
+npm run lint      # eslint
+```
+Backend
+```bash
+npm start         # nodemon server
+npm test          # (placeholder)
 ```
 
-## 🔒 Authentication
+## Recent UI Updates
+- Added modal overlay spacing to avoid overlap with sticky navbar.
+- Added ThemeContext (dark/light) toggle in navbar.
+- Enhanced card, inputs, and forms styling refinements.
 
-The app uses **JWT (JSON Web Tokens)** for authentication. After login, the token must be included in the request headers:
+## Contributing
+1. Fork & branch from `main`.
+2. Run lint/tests before PR.
+3. Submit PR with clear description and screenshots for UI changes.
 
-```javascript
-Headers: {
-  "Authorization": "Bearer <your-jwt-token>"
-}
-```
-
-## 🗃️ Database Schema
-
-### User Model
-```javascript
-{
-  fullName: String (required),
-  email: String (required, unique),
-  password: String (required),
-  createdOn: Date (default: now)
-}
-```
-
-### Note Model
-```javascript
-{
-  title: String (required),
-  content: String (required),
-  tags: [String] (default: []),
-  isPinned: Boolean (default: false),
-  userId: String (required),
-  createdOn: Date (default: now)
-}
-```
+## License
+MIT
