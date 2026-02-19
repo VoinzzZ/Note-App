@@ -24,6 +24,22 @@ const Home = () => {
     data: null,
   });
 
+  // Keep modal vertically clear of the sticky navbar and nicely centered
+  const modalStyles = {
+    overlay: {
+      backgroundColor: "rgba(0,0,0,0.2)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "88px 16px 24px", // top padding offsets navbar height
+      zIndex: 30,
+    },
+    content: {
+      position: "relative",
+      inset: "unset", // let flex layout handle positioning
+    }
+  };
+
   const [showToastMsg, setShowToastMsg] = useState({
     isShown: false,
     message: "",
@@ -73,7 +89,7 @@ const Home = () => {
         setAllNotes(response.data.notes);
       }
     } catch(error) {
-      console.log("An unexpected error ocurred. Please try again");
+      console.error("An unexpected error occurred while fetching notes:", error);
     }
   }
 
@@ -206,7 +222,7 @@ const Home = () => {
       )}
     </div>
 
-    <button className='fixed w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 right-10 bottom-10' 
+    <button className='fixed w-16 h-16 flex items-center justify-center rounded-2xl bg-primary hover:bg-blue-600 right-10 bottom-10 shadow-lg shadow-primary/30' 
     onClick={() => {
       setOpenEditModal({ isShown: true, type: "add", data: null})
     }}> 
@@ -216,13 +232,9 @@ const Home = () => {
     <Modal
     isOpen={openAddEditModal.isShown}
     onRequestClose={() => setOpenEditModal({ isShown: false, type: "add", data: null })}
-    style={{
-      overlay: {
-        backgroundColor: "rgba(0,0,0,0.2)",
-      }
-    }}
+    style={modalStyles}
     contentLabel='Add/Edit Note'
-    className='w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5'
+    className='w-[90%] md:w-[60%] lg:w-[40%] max-h-[80vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-md mx-auto p-5 border border-slate-100 dark:border-slate-700'
     >
       <AddEditNotes 
       type={openAddEditModal.type}
